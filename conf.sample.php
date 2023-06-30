@@ -9,6 +9,7 @@ $DRIVER="sql";
 $OPENAI_API_KEY="";             // OpenAI API key here
 $AZURE_API_KEY="";              // Azure API key here
 $ELEVENLABS_API_KEY="";         // 11labs API KEY
+$GCP_SA_KEY="";                // GCP Service Account key (path from root)
 
 
 // Player and Personality configuration. 
@@ -54,7 +55,7 @@ $ELEVEN_LABS["similarity_boost"]="0.75";		// Check https://beta.elevenlabs.io/sp
 //Allows you to toggle which providers you use for Text-to-Speech or Speech-to-Text
 //IF YOU DO NOT HEAR HERIKA MAKE SURE TO CHECK YOUR SYSTEM SOUNDS VOLUME
 $STTFUNCTION="azure";								// Valid options are azure or whisper so far
-$TTSFUNCTION="azure";								// Valid options are azure or mimic3 or 11labs  so far
+$TTSFUNCTION="gcp";								// Valid options are azure or mimic3 or 11labs or gcp so far
 
 //Configuration for changing default language for TTS
 $TTSLANGUAGE_AZURE="en-US";							// en-US, es-ES formats
