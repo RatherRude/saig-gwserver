@@ -1,6 +1,6 @@
 <?php
 
-include("tmpl/head.html");
+include('tmpl/head.html');
 
 function deleteDirectory($dir) {
     if (!is_dir($dir)) {
@@ -29,8 +29,8 @@ function deleteDirectory($dir) {
     rmdir($dir);
 }
 
-deleteDirectory(__DIR__.DIRECTORY_SEPARATOR."update_cache");
-mkdir(__DIR__.DIRECTORY_SEPARATOR."update_cache");
+deleteDirectory(__DIR__.DIRECTORY_SEPARATOR. 'update_cache');
+mkdir(__DIR__.DIRECTORY_SEPARATOR. 'update_cache');
 
 $api_url = 'https://api.github.com/repos/abeiro/saig-gwserver/releases/latest';
 $options = [
@@ -63,10 +63,11 @@ $orig_dir = __DIR__;
 $update_dir = 'update_cache';
 
 // Loop through files in update directory
-echo "<ul>";
+echo '<ul>';
 foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($update_dir)) as $file) {
     if ($file->isFile()) {
         $relative_path = str_replace($update_dir . DIRECTORY_SEPARATOR, '', $file->getPathname());
+        /** @var TYPE_NAME $zipball_url */
         $relative_path=str_replace("saig-gwserver-{$zipball_url}",'',$relative_path);
         
         $orig_file = $orig_dir . DIRECTORY_SEPARATOR . $relative_path;
@@ -83,16 +84,16 @@ foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($update_di
                 echo "<li>File $relative_path has not changed  ($orig_file vs {$file->getPathname()})</li>";
             } else {
                 echo "<li><b>File $relative_path has changed</b> ($orig_file vs {$file->getPathname()})\n</li>";
-                if ($_POST["doit"]) {
-                  echo "updating..";
+                if ($_POST['doit']) {
+                  echo 'updating..';
                   copy($file->getPathname(),$orig_file);
                 }
                 // Do something to update the file
             }
         } else {
             echo "<li><span style='color:red'>File $relative_path is a new file</b>  ($orig_file vs {$file->getPathname()})</span></li>";
-             if ($_POST["doit"]) {
-                  echo "updating..";
+             if ($_POST['doit']) {
+                  echo 'updating..';
                   @mkdir(dirname($orig_file));
                   copy($file->getPathname(),$orig_file);
                 }
@@ -101,11 +102,11 @@ foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($update_di
         }
     }
 }
-echo "</ul>";
+echo '</ul>';
 echo "
 <p><strong>Note. Files marked in bold, will be ovewritten!!!!</strong>
 <form action='updater.php' method='post'>
-    ".((!$_POST["doit"])?"<input type='submit' value='Proceed' name='doit' onclick=\"return confirm('Are you sure?')\">":"")."
+    ".((!$_POST['doit'])?"<input type='submit' value='Proceed' name='doit' onclick=\"return confirm('Are you sure?')\">": '')."
     <input type='button' value='Back' onclick=\"location.href='index.php'\"/>
     <input type='button' value='Refresh' onclick=\"location.href='updater.php'\"/>
 </form>
