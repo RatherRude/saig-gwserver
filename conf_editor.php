@@ -6,8 +6,8 @@ ob_start();
 
 $url = 'conf_editor.php';
 $file = 'conf.php';
-$TITLE="Config editor";
-require "tmpl/head.html";
+$TITLE= 'Config editor';
+require 'tmpl/head.html';
 
 // check if form has been submitted
 if (isset($_POST['text'])&& $_POST['save']) {
@@ -49,7 +49,7 @@ if ($_POST['check']) {
 <?php
 $buffer=ob_get_contents();
 ob_end_clean();
-$title = "Gateway Server CP for {$GLOBALS["PLAYER_NAME"]}";
+$title = "Gateway Server CP for {$GLOBALS['PLAYER_NAME']}";
 $buffer = preg_replace('/(<title>)(.*?)(<\/title>)/i', '$1' . $title . '$3', $buffer);
 echo $buffer;
 ?>

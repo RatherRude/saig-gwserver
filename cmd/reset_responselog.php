@@ -3,7 +3,7 @@
 
 $db = new SQLite3('mysqlitedb.db');
 
-$db->exec("UPDATE responselog set sent=0");
+$db->exec('UPDATE responselog set sent=0');
 $db->exec("DELETE FROM responselog where  text=''");
 
 

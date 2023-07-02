@@ -19,12 +19,12 @@ function split_sentences($paragraph)
     if (is_array($sentences))
         return $sentences;
     else
-        return array($sentences);
+        return [$sentences];
 }
 
 function br2nl($string)
 {
-    return preg_replace('/[\r\n]+/', '', preg_replace('/\<br(\s*)?\/?\>/i', "", $string));
+    return preg_replace('/[\r\n]+/', '', preg_replace('/\<br(\s*)?\/?\>/i', '', $string));
 }
 
 function cleanReponse($rawResponse)
@@ -38,40 +38,40 @@ function cleanReponse($rawResponse)
     $replacement = ''; 
     $rawResponse= preg_replace($pattern, $replacement, $rawResponse);
 
-    $rawResponse=strtr($rawResponse,array("{"=>"","}"=>""));
+    $rawResponse=strtr($rawResponse, ['{' => '', '}' => '']);
     
-    if (strpos($rawResponse, "(Context location") !== false) {
-        $rawResponseSplited = explode(":", $rawResponse);
+    if (strpos($rawResponse, '(Context location') !== false) {
+        $rawResponseSplited = explode(':', $rawResponse);
         $toSplit=$rawResponseSplited[2];
 
-    } else if (strpos($rawResponse, "(Context new location") !== false) {
-        $rawResponseSplited = explode(":", $rawResponse);
+    } else if (strpos($rawResponse, '(Context new location') !== false) {
+        $rawResponseSplited = explode(':', $rawResponse);
         $toSplit=$rawResponseSplited[2];
 
     } else
         $toSplit=$rawResponse;
     
     if (strpos($toSplit, "$HERIKA_NAME:") !== false) {
-        $rawResponseSplited = explode(":", $toSplit);
+        $rawResponseSplited = explode(':', $toSplit);
         $toSplit=$rawResponseSplited[1];
     }
 
     $sentences=split_sentences($toSplit);
     
-    if ($GLOBALS["DEBUG_MODE"])
+    if ($GLOBALS['DEBUG_MODE'])
         print_r($sentences);
 
-    $sentence = trim((implode(".", $sentences)));
+    $sentence = trim((implode('.', $sentences)));
 
-    $sentenceX = strtr($sentence,array(
-            ",."=>","
-            )
+    $sentenceX = strtr($sentence, [
+            ',.' => ','
+				]
     );
 
     // Strip no ascii.
     $sentenceXX = str_replace(
-        array('á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú','¿','¡'),
-        array('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U', '', ''),
+        ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú','¿','¡'],
+        ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U', '', ''],
         $sentenceX
     );
     
@@ -88,46 +88,46 @@ function print_array_as_table($data)
 
 
     // Print the first row with array keys
-    echo "<tr>";
+    echo '<tr>';
     foreach (array_keys($data[0]) as $key) {
-        echo "<th>" . $key . "</th>";
+        echo '<th>' . $key . '</th>';
     }
-    echo "</tr>";
+    echo '</tr>';
 
     // Print the remaining rows with array values
     foreach ($data as $row) {
         
-        if ($row["url"]) {
-            $colorIndex=abs(crc32(preg_replace('/in \d+ secs/', '', $row["url"])))%5;
-            $colors=array("white","#ffffc5","#d3fffb","#fad2ff","#e4ffce");
+        if ($row['url']) {
+            $colorIndex=abs(crc32(preg_replace('/in \d+ secs/', '', $row['url'])))%5;
+            $colors= ['white', '#ffffc5', '#d3fffb', '#fad2ff', '#e4ffce'];
         } else
             $colorIndex=0;
-        echo "<tr>";
+        echo '<tr>';
         foreach ($row as $n=>$cell) {
-            if ($n=="prompt") {
-                echo "<td style='background-color:{$colors[$colorIndex]}'><span class='foldableCtl' onclick='togglePre(this)' style='cursor:pointer'>[+]</span><pre class='foldable'>" . $cell . "</pre></td>";
+            if ($n== 'prompt') {
+                echo "<td style='background-color:$colors[$colorIndex]'><span class='foldableCtl' onclick='togglePre(this)' style='cursor:pointer'>[+]</span><pre class='foldable'>" . $cell . '</pre></td>';
             }
             else if (strpos($cell, 'background chat') !== false)
-                echo "<td style='font-style:italic;background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
-            else if (strpos($cell, $GLOBALS["PLAYER_NAME"].':') !== false)
-                echo "<td  style='color:blue;background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
+                echo "<td style='font-style:italic;background-color:$colors[$colorIndex]'>" . $cell . '</td>';
+            else if (strpos($cell, $GLOBALS['PLAYER_NAME'].':') !== false)
+                echo "<td  style='color:blue;background-color:$colors[$colorIndex]'>" . $cell . '</td>';
             else if (strpos($cell, 'obtains a quest') !== false)
-                echo "<td  style='font-weight:bold;background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
+                echo "<td  style='font-weight:bold;background-color:$colors[$colorIndex]'>" . $cell . '</td>';
             else if (strpos($cell, '$HERIKA_NAME:') !== false)
-                echo "<td  style='color:green;background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
+                echo "<td  style='color:green;background-color:$colors[$colorIndex]'>" . $cell . '</td>';
             else    
-                echo "<td  style='background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
+                echo "<td  style='background-color:$colors[$colorIndex]'>" . $cell . '</td>';
         }
-        echo "</tr>";
+        echo '</tr>';
     }
 
     // End the HTML table
-    echo "</table>";
+    echo '</table>';
 }
 
 
 
-function parseResponseV2($responseText, $forceMood = "",$topicQueue) {
+function parseResponseV2($responseText, $forceMood = '', $topicQueue) {
 
 	global $db,$startTime;
 	
@@ -171,23 +171,23 @@ function parseResponseV2($responseText, $forceMood = "",$topicQueue) {
 		$responseText=$responseTextUnmooded;
 
 		if ($n==0) {	// TTS stuff for first sentence
-			if ($GLOBALS["TTSFUNCTION"] == "azure") {
-				if ($GLOBALS["AZURE_API_KEY"]) {
-					require_once("tts/tts-azure.php");
+			if ($GLOBALS['TTSFUNCTION'] == 'azure') {
+				if ($GLOBALS['AZURE_API_KEY']) {
+					require_once('tts/tts-azure.php');
 					tts($responseTextUnmooded, $mood, $responseText);
 				}
 			}
 
-			if ($GLOBALS["TTSFUNCTION"] == "mimic3") {
-				if ($GLOBALS["MIMIC3"]) {
-					require_once("tts/tts-mimic3.php");
+			if ($GLOBALS['TTSFUNCTION'] == 'mimic3') {
+				if ($GLOBALS['MIMIC3']) {
+					require_once('tts/tts-mimic3.php');
 					ttsMimic($responseTextUnmooded, $mood, $responseText);
 				}
 			}
 			
-			if ($GLOBALS["TTSFUNCTION"] == "11labs") {
-				if ($GLOBALS["ELEVENLABS_API_KEY"]) {
-					require_once("tts/tts-11labs.php");
+			if ($GLOBALS['TTSFUNCTION'] == '11labs') {
+				if ($GLOBALS['ELEVENLABS_API_KEY']) {
+					require_once('tts/tts-11labs.php');
 					tts($responseTextUnmooded, $mood, $responseText);
 				}
 			}
@@ -197,47 +197,47 @@ function parseResponseV2($responseText, $forceMood = "",$topicQueue) {
 			if (!$errorFlag) {
 				$db->insert(
 					'responselog',
-					array(
+					[
 						'localts' => time(),
 						'sent' => 0,
 						'text' => trim(preg_replace('/\s\s+/', ' ', SQLite3::escapeString($responseTextUnmooded))),
-						'actor' => "Player",
+						'actor' => 'Player',
 						'action' => $topicQueue,
 						'tag'=>$tag
-					)
+					]
 				);
-				$outBuffer[]=array(
+				$outBuffer[]= [
 						'localts' => time(),
 						'sent' => 0,
 						'text' => trim(preg_replace('/\s\s+/', ' ', $responseTextUnmooded)),
-						'actor' => "Player",
+						'actor' => 'Player',
 						'action' => $topicQueue,
 						'tag'=>$tag
-					);
+				];
 			}
 			$db->insert(
 				'log',
-				array(
+				[
 					'localts' => time(),
-					'prompt' => nl2br(SQLite3::escapeString(print_r($GLOBALS["DEBUG_DATA"],true))),
+					'prompt' => nl2br(SQLite3::escapeString(print_r($GLOBALS['DEBUG_DATA'],true))),
 					'response' => (SQLite3::escapeString(print_r($rawResponse,true).$responseTextUnmooded)),
-					'url' => nl2br(SQLite3::escapeString(print_r( base64_decode(stripslashes($_POST["preprompt"])),true)." in ".(time()-$startTime)." secs " ))
-					
-				
-				)
+					'url' => nl2br(SQLite3::escapeString(print_r( base64_decode(stripslashes($_POST['preprompt'])),true). ' in ' .(time()-$startTime). ' secs '))
+
+
+				]
 			);
 
 		} else {
 			$db->insert(
 				'log',
-				array(
+				[
 					'localts' => time(),
 					'prompt' => nl2br(SQLite3::escapeString(print_r($parms,true))),
 					'response' => (SQLite3::escapeString(print_r($rawResponse,true))),
-					'url' => nl2br(SQLite3::escapeString(print_r( base64_decode(stripslashes($_GET["DATA"])),true)." in ".(time()-$startTime)." secs with ERROR STATE" ))
-					
-				
-				)
+					'url' => nl2br(SQLite3::escapeString(print_r( base64_decode(stripslashes($_GET['DATA'])),true). ' in ' .(time()-$startTime). ' secs with ERROR STATE'))
+
+
+				]
 			);
 
 		}
@@ -270,24 +270,24 @@ function parseResponseV2($responseText, $forceMood = "",$topicQueue) {
 		if ($n==0) 		//First sentence was genetared
 			continue;
 
-		if ($GLOBALS["TTSFUNCTION"] == "azure") {
-			if ($GLOBALS["AZURE_API_KEY"]) {
-				require_once("tts/tts-azure.php");
+		if ($GLOBALS['TTSFUNCTION'] == 'azure') {
+			if ($GLOBALS['AZURE_API_KEY']) {
+				require_once('tts/tts-azure.php');
 				tts($responseTextUnmooded, $mood, $responseText);
 			}
 		}
 
-		if ($GLOBALS["TTSFUNCTION"] == "mimic3") {
-			if ($GLOBALS["MIMIC3"]) {
-				require_once("tts/tts-mimic3.php");
+		if ($GLOBALS['TTSFUNCTION'] == 'mimic3') {
+			if ($GLOBALS['MIMIC3']) {
+				require_once('tts/tts-mimic3.php');
 				ttsMimic($responseTextUnmooded, $mood, $responseText);
 			}
 		}
 	
 		
-		if ($GLOBALS["TTSFUNCTION"] == "11labs") {
-			if ($GLOBALS["ELEVENLABS_API_KEY"]) {
-				require_once("tts/tts-11labs.php");
+		if ($GLOBALS['TTSFUNCTION'] == '11labs') {
+			if ($GLOBALS['ELEVENLABS_API_KEY']) {
+				require_once('tts/tts-11labs.php');
 				tts($responseTextUnmooded, $mood, $responseText);
 			}
 		}

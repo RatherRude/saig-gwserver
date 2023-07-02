@@ -3,10 +3,10 @@
 
 $db = new SQLite3('mysqlitedb.db');
 
-$db->exec("
-DROP TABLE `eventlog`;");
+$db->exec('
+DROP TABLE `eventlog`;');
 
-$db->exec("
+$db->exec('
 CREATE TABLE `eventlog` (
   `ts` text NOT NULL,
   `type` varchar(128) ,
@@ -14,12 +14,12 @@ CREATE TABLE `eventlog` (
   `sess` varchar(1024) ,
   `gamets` bigint NOT NULL,
   `localts` bigint NOT NULL
-);");
+);');
 
-$db->exec("
-DROP TABLE `responselog`;");
+$db->exec('
+DROP TABLE `responselog`;');
 
-$db->exec("
+$db->exec('
 CREATE TABLE `responselog` (
   `localts` bigint NOT NULL,
   `sent` bigint NOT NULL,
@@ -28,21 +28,21 @@ CREATE TABLE `responselog` (
   `action` varchar(256),
   `tag` varchar(256)
 
-);");
+);');
 
-$db->exec("DROP TABLE `log`;");
+$db->exec('DROP TABLE `log`;');
 
-$db->exec("
+$db->exec('
 CREATE TABLE `log` (
   `localts` bigint NOT NULL,
   `prompt` text,
   `response` text,
   `url` text
-);");
+);');
 
-$db->exec("DROP TABLE `quests`;");
+$db->exec('DROP TABLE `quests`;');
 
-$db->exec("
+$db->exec('
 CREATE TABLE `quests` (
   `ts` text NOT NULL,
   `sess` varchar(1024) ,
@@ -61,11 +61,11 @@ CREATE TABLE `quests` (
   `gamets` bigint NOT NULL,
   `data` text,
   `status` text
-);");
+);');
 
-$db->exec("DROP TABLE `speech`;");
+$db->exec('DROP TABLE `speech`;');
 
-$db->exec("
+$db->exec('
 CREATE TABLE `speech` (
   `ts` text NOT NULL,
   `sess` varchar(1024) ,
@@ -76,8 +76,8 @@ CREATE TABLE `speech` (
   `topic` text,
   `localts` bigint NOT NULL,
   `gamets` bigint NOT NULL
-);");
+);');
 
-@mkdir(__DIR__ .DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR."soundcache");
+@mkdir(__DIR__ .DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR. 'soundcache');
 
 ?>
