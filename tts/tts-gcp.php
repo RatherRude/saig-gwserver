@@ -8,18 +8,23 @@ use Google\Cloud\TextToSpeech\V1\AudioConfig;
 use Google\Cloud\TextToSpeech\V1\SynthesisInput;
 use Google\Cloud\TextToSpeech\V1\TextToSpeechClient;
 use Google\Cloud\TextToSpeech\V1\AudioEncoding;
+use Google\Cloud\TextToSpeech\V1\VoiceSelectionParams;
 
 function tts($textString, $mood = 'default', $stringforhash)
 {
-  if (!isset($GLOBALS['GCP_SA_JSON'])) return false;
   $startTime = microtime(true);
 
   // Path to the service account key JSON file
-  $serviceAccountKeyJson = $GLOBALS['GCP_SA_JSON'];
+  $serviceAccountKeyFile = 'tts/gcp_key.json';
+  if (!file_exists($serviceAccountKeyFile)) {
+    // Handle the error when the service account key file is missing
+    error_log('Service account key file not found.');
+    return false;
+  }
 
-  // Initialize the client with authentication using the provided service account key JSON content
+  // Initialize the client with authentication using the service account key file
   $client = new TextToSpeechClient([
-      'credentials' => $serviceAccountKeyJson,
+      'credentials' => $serviceAccountKeyFile,
   ]);
 
   // Configure the synthesis input
@@ -35,7 +40,7 @@ function tts($textString, $mood = 'default', $stringforhash)
   $audioConfig->setAudioEncoding(AudioEncoding::LINEAR16); // WAV format
 
   // Perform the text-to-speech synthesis
-  $response = $client->synthesizeSpeech($input, $audioConfig, $voice);
+  $response = $client->synthesizeSpeech($input, $voice, $audioConfig);
 
   // Trying to avoid sync problems when saving
   $audioContent = $response->getAudioContent();
@@ -49,5 +54,4 @@ function tts($textString, $mood = 'default', $stringforhash)
   file_put_contents($filename . '.txt', trim($textString) . "\n\rsize of wav ($fileSize)\n\r" .
       'execution time: ' . (microtime(true) - $startTime) . ') secs ' .
       " function tts($textString,$mood=\"cheerful\",$stringforhash)");
-
 }
