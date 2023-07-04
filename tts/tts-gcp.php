@@ -15,10 +15,10 @@ function tts($textString, $mood = 'default', $stringforhash)
   $startTime = microtime(true);
 
   // Path to the service account key JSON file
-  $serviceAccountKeyFile = '..' . $GLOBALS['GCP_SA_KEY'];
+  $serviceAccountKeyJson  = $GLOBALS['GCP_SA_JSON'];
 
-  // Initialize the client with authentication
-  putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $serviceAccountKeyFile);
+  // Initialize the client with authentication using the provided service account key JSON content
+  putenv('GOOGLE_APPLICATION_CREDENTIALS=data:text/plain;base64,' . base64_encode($serviceAccountKeyJson));
 
   $client = new TextToSpeechClient();
 
