@@ -15,7 +15,7 @@ function tts($textString, $mood = 'default', $stringforhash)
   $startTime = microtime(true);
 
   // Path to the service account key JSON file
-  $serviceAccountKeyFile = 'tts/gcp_key.json';
+  $serviceAccountKeyFile = $GLOBALS['GCP_SA_FILEPATH'];
   if (!file_exists($serviceAccountKeyFile)) {
     // Handle the error when the service account key file is missing
     error_log('Service account key file not found.');
