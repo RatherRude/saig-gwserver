@@ -95,7 +95,7 @@ function parseResponse($responseText, $forceMood = "") {
 			}
 
 			if ($GLOBALS["TTSFUNCTION"] == "gcp") {
-				if ($GLOBALS["GCP_SA_KEY"]) {
+				if ($GLOBALS["GCP_SA_JSON"]) {
 					require_once("tts/tts-gcp.php");
 					tts($responseTextUnmooded, $mood, $responseText);
 				}
