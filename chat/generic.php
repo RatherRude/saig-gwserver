@@ -20,12 +20,31 @@ function requestGeneric($request, $preprompt = '', $queue = 'AASPGQuestDialogue2
     $starTime=microtime(true);
     
     $historic = $db->lastDataFor("",$lastDataAmount*-1);
+
+    $file = fopen('twitch.txt', 'r+');
+    while (($line = fgets($file)) !== false) {
+        $message = [
+            'role' => 'user',
+            'content' => 'Twitch Chat Entity '.$line,
+        ];
+        $historic[] = $message;
+    }
+
+// Clear the file contents
+//ftruncate($file, 0);
+//rewind($file);
+    fclose($file);
+
     $head = array();
     $foot = array();
 
-    $head[] = array('role' => 'user', 'content' => '('.$PROMPT_HEAD.$GLOBALS["HERIKA_PERS"]);
+    $head[] = array('role' => 'user', 'content' => '('.$PROMPT_HEAD.$GLOBALS["HERIKA_PERS"].')');
     $prompt[] = array('role' => 'assistant', 'content' => $request);
-    $foot[] = array('role' => 'user', 'content' => $GLOBALS["PLAYER_NAME"].':' . $preprompt);
+
+    if(filesize('twitch.txt') === 0) {
+        $foot[] = array('role' => 'user', 'content' => $GLOBALS["PLAYER_NAME"].':' . $preprompt);
+    }
+
 
     if (!$preprompt)
         $parms = array_merge($head, ($historic), $prompt);

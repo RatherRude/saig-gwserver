@@ -1,0 +1,35 @@
+{
+  "name": "rude-twitch-bot",
+  "version": "1.0.0",
+  "description": "Rude's Twitch Bot(WIP)",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "ts-node-esm ./index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RatherRude/saig-gwserver.git"
+  },
+  "keywords": [
+    "rude",
+    "twitch",
+    "bot"
+  ],
+  "author": "Rude",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RatherRude/saig-gwserver/issues"
+  },
+  "homepage": "https://github.com/RatherRude/saig-gwserver#readme",
+  "dependencies": {
+    "@types/tmi.js": "^1.8.3",
+    "axios": "^1.4.0",
+    "tmi.js": "^1.8.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "type": "module"
+}
