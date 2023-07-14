@@ -16,7 +16,7 @@ function stt($file) {
       'file' => fopen($file, 'r'),
       'response_format' => 'verbose_json',
       'language'=>$GLOBALS["TTSLANGUAGE_WHISPER"],
-      'prompt'=>"{$GLOBALS["HERIKA_NAME"]}, the Dragonborns are taking the Nords to Whiterun! Check that bard\'s lute! Fus Ro Dah!"
+      'prompt'=>"The Dragonborn joined the Nords in Whiterun! Don't eat that bard's lute! Sceolang! {$GLOBALS['HERIKA_NAME']}!"
   ]);
 
   return $response["text"];

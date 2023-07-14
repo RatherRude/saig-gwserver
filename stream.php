@@ -57,7 +57,7 @@ function returnLines($lines) {
 	foreach ($lines as $n=>$sentence) {
 
 		preg_match_all('/\((.*?)\)/', $sentence, $matches);
-		$responseTextUnmooded = trim(preg_replace('/\((.*?)\)/', '', $sentence));
+		$responseTextUnmooded = trim(preg_replace('/\((.*?)\)/', '', preg_replace("/\?\./", "?", preg_replace("/!\./", "!", $sentence))));
 		
 		if (isset($forceMood)) {
 			$mood = $forceMood;
@@ -104,7 +104,7 @@ function returnLines($lines) {
 						'localts' => time(),
 						'sent' => 1,
 						'text' => trim(preg_replace('/\s\s+/', ' ', $responseTextUnmooded)),
-						'actor' => "$HERIKA_NAME",
+						'actor' => "Herika",
 						'action' => "AASPGQuestDialogue2Topic1B1Topic",
 						'tag'=>(isset($tag)?$tag:"")
 					);
@@ -161,14 +161,14 @@ if ($finalParsedData[0]=="inputtext_s") {
 		$forceMood="whispering";
 }
 $preprompt=preg_replace("/^[^:]*:/", "", $finalParsedData[3]);
-$lastNDataForContext=10;
+$lastNDataForContext=$GLOBALS['CONTEXT_HISTORY'];
 $contextData = $db->lastDataFor("",$lastNDataForContext*-1);
 $head = array();
 $foot = array();
 
 $head[] = array('role' => 'user', 'content' => '('.$PROMPT_HEAD.$GLOBALS["HERIKA_PERS"]);
 $prompt[] = array('role' => 'assistant', 'content' => $request);
-$foot[] = array('role' => 'user', 'content' => $GLOBALS["PLAYER_NAME"].':' . $preprompt);
+//$foot[] = array('role' => 'user', 'content' => $GLOBALS["PLAYER_NAME"].':' . $preprompt);
 
 if (!$preprompt)
 	$parms = array_merge($head, ($contextData), $prompt);

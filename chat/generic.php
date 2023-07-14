@@ -10,7 +10,7 @@ require_once($path . "lib/Misc.php");
 
 // Preparing data to send
 
-function requestGeneric($request, $preprompt = '', $queue = 'AASPGQuestDialogue2Topic1B1Topic',$lastDataAmount=10,$tag='')
+function requestGeneric($request, $preprompt = '', $queue = 'AASPGQuestDialogue2Topic1B1Topic',$lastDataAmount=10,$tag='',$external=false)
 {
     global $db;
     $client = OpenAI::client($GLOBALS["OPENAI_API_KEY"]);
@@ -25,7 +25,7 @@ function requestGeneric($request, $preprompt = '', $queue = 'AASPGQuestDialogue2
 
     $head[] = array('role' => 'user', 'content' => '('.$PROMPT_HEAD.$GLOBALS["HERIKA_PERS"]);
     $prompt[] = array('role' => 'assistant', 'content' => $request);
-    $foot[] = array('role' => 'user', 'content' => $GLOBALS["PLAYER_NAME"].':' . $preprompt);
+    $foot[] = array('role' => 'user', 'content' => $external ? $preprompt : $GLOBALS["PLAYER_NAME"].':' . $preprompt);
 
     if (!$preprompt)
         $parms = array_merge($head, ($historic), $prompt);
@@ -65,14 +65,13 @@ function requestGeneric($request, $preprompt = '', $queue = 'AASPGQuestDialogue2
     
     $GLOBALS["DEBUG_DATA"]["OPENAI_LAG"]=(microtime(true)-$starTime);
     
-  
     //$modifiedSentence = preg_replace("/\.+/", ".", $sentence);  // Get ride of the double point issue
     $modifiedSentence = preg_replace("/(?<!\.)\.{2}(?!\.)/", ".", $sentence); // Get ride of the double point issue, leaving ...
 
     $sentence=$modifiedSentence;
 
     $responseTextUnmooded = preg_replace('/\((.*?)\)/', '', $sentence);
-    
+
     return trim(preg_replace('/\s\s+/', ' ', $sentence));
     // Final result.
     if ($GLOBALS["DEBUG_MODE"])

@@ -51,7 +51,7 @@ function cleanReponse($rawResponse)
     } else
         $toSplit=$rawResponse;
     
-    if (strpos($toSplit, "{$GLOBALS["HERIKA_NAME"]}:") !== false) {
+    if (strpos($toSplit, "Herika:") !== false) {
         $rawResponseSplited = explode(":", $toSplit);
         $toSplit=$rawResponseSplited[1];
     }
@@ -113,7 +113,7 @@ function print_array_as_table($data)
                 echo "<td  style='color:blue;background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
             else if (strpos($cell, 'obtains a quest') !== false)
                 echo "<td  style='font-weight:bold;background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
-            else if (strpos($cell, '$HERIKA_NAME:') !== false)
+            else if (strpos($cell, 'Herika:') !== false)
                 echo "<td  style='color:green;background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
             else    
                 echo "<td  style='background-color:{$colors[$colorIndex]}'>" . $cell . "</td>";
@@ -127,7 +127,7 @@ function print_array_as_table($data)
 
 
 
-function parseResponseV2($responseText, $forceMood = "",$topicQueue) {
+function parseResponseV2($responseText, $forceMood = "",$topicQueue, $actor="Player") {
 
 	global $db,$startTime;
 	
@@ -208,7 +208,7 @@ function parseResponseV2($responseText, $forceMood = "",$topicQueue) {
 						'localts' => time(),
 						'sent' => 0,
 						'text' => trim(preg_replace('/\s\s+/', ' ', SQLite3::escapeString($responseTextUnmooded))),
-						'actor' => "Player",
+						'actor' => $actor ?? "Player",
 						'action' => $topicQueue,
 						'tag'=>$tag
 					)
