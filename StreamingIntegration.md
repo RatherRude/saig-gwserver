@@ -32,7 +32,5 @@ This bundle contains:
 //	Here is an example of a CORS Plugin's configuration:
 //		- Install Firefox Add-On: Allow CORS: Access-Control-Allow-Origin
 //		- Navigate to options
-//		- 2. Access-Control-Allow-Headers -> On
-//		- 4. Access-Control-Allow-Origin -> *
 //		- 6. Whitelisted domains from - Allow CORS -> https://kick.com
 //	You don't need this specific CORS Plugin, just make sure to set it up right as CORS is an important and valuable security feature that you don't want disabled by default(!).
