@@ -193,7 +193,7 @@ $foot = array();
 
 $head[] = array('role' => 'user', 'content' => '('.$PROMPT_HEAD.$GLOBALS["HERIKA_PERS"]);
 $prompt[] = array('role' => 'assistant', 'content' => $request);
-$foot[] = array('role' => 'user', 'content' => $GLOBALS["PLAYER_NAME"].':' . $preprompt);
+//$foot[] = array('role' => 'user', 'content' => $GLOBALS["PLAYER_NAME"].':' . $preprompt);
 
 if (!$preprompt)
 	$parms = array_merge($head, ($contextData), $prompt);

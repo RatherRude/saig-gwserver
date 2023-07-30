@@ -9,7 +9,7 @@ require_once($path . "lib/Misc.php");
 
 // Preparing data to send
 
-function requestGeneric($request, $preprompt = '', $queue = 'AASPGQuestDialogue2Topic1B1Topic', $lastDataAmount=10, $tag='')
+function requestGeneric($request, $preprompt = '', $queue = 'AASPGQuestDialogue2Topic1B1Topic', $lastDataAmount=10, $tag='',$external=false)
 {
     global $db;
     $client = OpenAI::client($GLOBALS["OPENAI_API_KEY"]);
@@ -30,7 +30,7 @@ function requestGeneric($request, $preprompt = '', $queue = 'AASPGQuestDialogue2
 
     $head[] = array('role' => 'user', 'content' => '('.$PROMPT_HEAD.$GLOBALS["HERIKA_PERS"].$PROMPT_RULES);
     $prompt[] = array('role' => 'assistant', 'content' => $request);
-    $foot[] = array('role' => 'user', 'content' => $GLOBALS["PLAYER_NAME"].':' . $preprompt);
+    $foot[] = array('role' => 'user', 'content' => $external ? $preprompt : $GLOBALS["PLAYER_NAME"].':' . $preprompt);
 
 
     if (!$preprompt) {
