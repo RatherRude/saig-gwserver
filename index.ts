@@ -1,7 +1,6 @@
 import { ChatUserstate, Client } from 'tmi.js';
 import axios from 'axios';
 import FormData from 'form-data';
-import fs from 'fs';
 
 // Configuration: Set Twitch channel name and bot name
 const twitchConfig = {
